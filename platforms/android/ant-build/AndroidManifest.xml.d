@@ -1,2 +1,2 @@
-C:\sandbox\webd265\ch04\platforms\android\ant-build\AndroidManifest.xml : \
-C:\sandbox\webd265\ch04\platforms\android\AndroidManifest.xml \
+C:\Sandbox\FilerApp\platforms\android\ant-build\AndroidManifest.xml : \
+C:\Sandbox\FilerApp\platforms\android\AndroidManifest.xml \
