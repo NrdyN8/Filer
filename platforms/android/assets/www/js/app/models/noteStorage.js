@@ -220,6 +220,7 @@ define( [ "yasmf", "Q", "app/factories/noteFactory" ], function( _y, Q, noteFact
         "name": _y.T( "app.ns.A_NEW_NOTE" ),
         "textContents": _y.T( "app.ns.WHATS_ON_YOUR_MIND" ),
         "mediaContents": newMediaFileName,
+		//Status default
 		"status": _y.T("app.ns.NEW_NOTE_STATUS")
       } );
       // add it to our collection
@@ -353,6 +354,7 @@ define( [ "yasmf", "Q", "app/factories/noteFactory" ], function( _y, Q, noteFact
       "en": "The note could not be removed.",
       "es": "La nota no se eliminó."
     },
+	//Translation for open
 	"app.ns.NEW_NOTE_STATUS": {
       "en": "Open",
       "es": "abierto"

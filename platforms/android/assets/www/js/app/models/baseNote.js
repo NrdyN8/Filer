@@ -216,7 +216,8 @@ define( [ "yasmf" ], function( _y ) {
       configurable: true
     } );
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	self._status = "Closed";
+	//Getter and Setter for status
+	self._status = "";
 	self.getStatus = function(){
 		return self._status;
 	}
@@ -229,8 +230,6 @@ define( [ "yasmf" ], function( _y ) {
 		set: self.setStatus,
 		configurable: true
 	});
-	
-	
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     /**
      * Serializes the object into a JSON string ready
@@ -270,6 +269,7 @@ define( [ "yasmf" ], function( _y ) {
         self.unitValue = aNote.unitValue; // so we don't have to recalc it
         // but assign this one last so we have the proper modification date
         self._modifiedDate = new Date( aNote.modifiedDate );
+		self._status = aNote.status;
         return true;
       } catch ( e ) {
         return false;
@@ -327,6 +327,8 @@ define( [ "yasmf" ], function( _y ) {
         if ( typeof options.modifiedDate !== "undefined" ) {
           self._modifiedDate = options.modifiedDate;
         }
+		
+		//Sets the status options
 		if ( typeof options.status !== "undefined" ) {
           self._status = options.status;
         }
