@@ -215,6 +215,23 @@ define( [ "yasmf" ], function( _y ) {
       get: self.getRepresentation,
       configurable: true
     } );
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	self._status = "Closed";
+	self.getStatus = function(){
+		return self._status;
+	}
+	self.setStatus = function(newStatus){
+		self._status = newStatus;
+		self._modifiedDate = new Date();
+	}
+	Object.defineProperty(self, "status", {
+		get: self.getStatus,
+		set: self.setStatus,
+		configurable: true
+	});
+	
+	
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     /**
      * Serializes the object into a JSON string ready
      * for saving in storage.
@@ -229,7 +246,8 @@ define( [ "yasmf" ], function( _y ) {
         "mediaContents": self.mediaContents,
         "unitValue": self.unitValue,
         "unitLabels": self.unitLabels,
-        "representation": self.representation
+        "representation": self.representation,
+		"status": self.status
       } );
     };
     Object.defineProperty( self, "JSON", {
@@ -308,6 +326,9 @@ define( [ "yasmf" ], function( _y ) {
         }
         if ( typeof options.modifiedDate !== "undefined" ) {
           self._modifiedDate = options.modifiedDate;
+        }
+		if ( typeof options.status !== "undefined" ) {
+          self._status = options.status;
         }
       }
     };

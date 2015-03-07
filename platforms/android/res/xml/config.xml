@@ -11,9 +11,9 @@
     <feature name="SoftKeyboard">
         <param name="android-package" value="org.apache.cordova.plugin.softkeyboard.SoftKeyboard" />
     </feature>
-    <name>Ch04</name>
+    <name>Filer</name>
     <description>
-        A sample Apache Cordova application that responds to the deviceready event.
+        A simple filing app
     </description>
     <author email="dev@cordova.apache.org" href="http://cordova.io">
         Apache Cordova Team
