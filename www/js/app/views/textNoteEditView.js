@@ -4,7 +4,7 @@
  *
  * noteEditView.js
  * @author Kerri Shotts
- * @version 1.0.0
+ * @version 2.0.0
  *
  * Copyright (c) 2013 Packt Publishing
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this
@@ -41,8 +41,8 @@
  */
 /*global define*/
 define( [ "yasmf", "app/models/noteStorageSingleton",
-  "text!html/textNoteEditView.html!strip"
-], function( _y, noteStorageSingleton, textNoteEditViewHTML ) {
+  "text!html/textNoteEditView.html!strip", "hammer"
+], function( _y, noteStorageSingleton, textNoteEditViewHTML, Hammer ) {
   // store our classname for easy overriding later
   var _className = "TextNoteEditView";
   var TextNoteEditView = function() {
@@ -69,19 +69,39 @@ define( [ "yasmf", "app/models/noteStorageSingleton",
       noteStorageSingleton.saveNote( self._note );
     };
     /**
-     * Delete the specific note. NO WARNING!
+     * Delete the specific note.
      */
     self.deleteNote = function() {
-      noteStorageSingleton.removeNote( self._note.uid );
-      // return to the previous view.
-      self.destroy();
+      var areYouSure = new _y.UI.Alert();
+      areYouSure.initWithOptions( {
+        title: _y.T( "app.nev.action.DELETE_NOTE" ),
+        text: _y.T( "app.nev.action.ARE_YOU_SURE_THIS_ACTION_CANT_BE_UNDONE" ),
+        promise: true,
+        buttons: [ _y.UI.Alert.button( _y.T( "DELETE" ), {
+            type: "destructive"
+          } ),
+          _y.UI.Alert.button( _y.T( "CANCEL" ), {
+            type: "bold",
+            tag: -1
+          } )
+        ]
+      } );
+      areYouSure.show().then( function( idx ) {
+        if ( idx > -1 ) {
+          noteStorageSingleton.removeNote( self._note.uid );
+          // return to the previous view.
+          self.navigationController.popView();
+        }
+      } ).catch( function( anError ) {
+        return; // happens when a cancel button is pressed
+      } ).done();
     };
     /**
      * Go back to the previous view after saving the note.
      */
     self.goBack = function() {
       self.saveNote();
-      self.destroy();
+      self.navigationController.popView();
     };
     /**
      * Render the template, passing the note contents and
@@ -112,9 +132,8 @@ define( [ "yasmf", "app/models/noteStorageSingleton",
         ".ui-navigation-bar .ui-bar-button-group.ui-align-right .ui-bar-button" );
       self._scrollContainer = self.element.querySelector( ".ui-scroll-container" );
       self._contentsEditor = self.element.querySelector( ".ui-text-box" );
-      // the back and delete buttons should have an event listener
-      _y.UI.event.addListener( self._backButton, "click", self.goBack )
-      _y.UI.event.addListener( self._deleteButton, "click", self.deleteNote );
+      Hammer( self._backButton ).on( "tap", self.goBack );
+      Hammer( self._deleteButton ).on( "tap", self.deleteNote );
       _y.UI.backButton.addListenerForNotification( "backButtonPressed", self.goBack );
     };
     /**
@@ -129,6 +148,9 @@ define( [ "yasmf", "app/models/noteStorageSingleton",
       self.super( _className, "init", [ undefined, "div", self.class +
         " noteEditView ui-container", theParentElement
       ] );
+      // listen for our disappearance
+      self.addListenerForNotification( "viewWasPopped", self.releaseBackButton );
+      self.addListenerForNotification( "viewWasPopped", self.destroy );
     };
     self.overrideSuper( self.class, "initWithOptions", self.init );
     self.initWithOptions = function( options ) {
@@ -155,6 +177,9 @@ define( [ "yasmf", "app/models/noteStorageSingleton",
     self.overrideSuper( self.class, "destroy", self.destroy );
     self.destroy = function() {
       self.releaseBackButton();
+      // Stop listening for our disappearance
+      self.removeListenerForNotification( "viewWasPopped", self.releaseBackButton );
+      self.removeListenerForNotification( "viewWasPopped", self.destroy );
       // release our objects
       self._navigationBar = null
       self._backButton = null;
@@ -173,6 +198,14 @@ define( [ "yasmf", "app/models/noteStorageSingleton",
     "app.nev.DELETE_NOTE": {
       "EN": "Delete",
       "ES": "Eliminar"
+    },
+    "app.nev.action.DELETE_NOTE": {
+      "EN": "Delete Note",
+      "ES": "Eliminar Nota"
+    },
+    "app.nev.action.ARE_YOU_SURE_THIS_ACTION_CANT_BE_UNDONE": {
+      "EN": "Are you sure? This action can't be undone.",
+      "ES": "¿Está seguro? Esta acción no se puede deshacer."
     }
   } );
   return TextNoteEditView;

@@ -4,7 +4,7 @@
  *
  * main.js
  * @author Kerri Shotts
- * @version 0.5.0
+ * @version 1.0.0
  *
  * Copyright (c) 2013 Packt Publishing
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this
@@ -49,10 +49,17 @@ define( [ "yasmf", "app/views/noteListView" ], function( _y, NoteListView ) {
     var rootContainer = _y.ge( "rootContainer" );
     // create a new note list
     var noteListView = new NoteListView();
-    // and tell it where to attach
-    noteListView.init( rootContainer );
     // store this for future reference
     APP.noteListView = noteListView;
+    // initialize it
+    noteListView.init();
+    // create a new navigation controller
+    var navigationController = new _y.UI.NavigationController();
+    navigationController.initWithOptions( {
+      rootView: noteListView,
+      parent: rootContainer
+    } );
+    APP.navigationController = navigationController;
   };
   return APP;
 } );

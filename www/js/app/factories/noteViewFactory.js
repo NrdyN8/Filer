@@ -4,7 +4,7 @@
  *
  * noteFactory.js
  * @author Kerri Shotts
- * @version 1.0.0
+ * @version 4.0.0
  *
  * Copyright (c) 2013 Packt Publishing
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this
@@ -40,8 +40,11 @@
          onevar:false 
  */
 /*global define*/
-define( [ "app/views/textNoteEditView", "app/factories/noteFactory" ], function(
-  TextNoteEditView, noteFactory ) {
+define( [ "app/views/textNoteEditView", "app/views/audioNoteEditView",
+  "app/views/imageNoteEditView", "app/views/videoNoteEditView",
+  "app/factories/noteFactory"
+], function( TextNoteEditView, AudioNoteEditView, ImageNoteEditView, VideoNoteEditView,
+  noteFactory ) {
   var noteViewFactory = {};
   /**
    * Creates a new note view, given the type (one of the constants in noteFactory).
@@ -50,9 +53,15 @@ define( [ "app/views/textNoteEditView", "app/factories/noteFactory" ], function(
     switch ( noteType.toUpperCase().trim() ) {
       case noteFactory.BASENOTE:
         return new TextNoteEditView();
+      case noteFactory.AUDIONOTE:
+        return new AudioNoteEditView();
+      case noteFactory.IMAGENOTE:
+        return new ImageNoteEditView();
+      case noteFactory.VIDEONOTE:
+        return new VideoNoteEditView();
       default:
         throw new Error( "Note View Factory doesn't understand a " + noteType );
     }
-  }
+  };
   return noteViewFactory;
 } );

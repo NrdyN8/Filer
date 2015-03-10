@@ -2,7 +2,7 @@
 <!--
       noteListItem.html
       @author Kerri Shotts
-      @version 0.5.0
+      @version 1.0.0
 
       Copyright (c) 2013 Packt Publishing
       Permission is hereby granted, free of charge, to any person obtaining a copy of this
@@ -27,8 +27,12 @@
     <div class="ui-label note-name">%NAME%</div>
     <div class="ui-label note-modified-date">%MODIFIED%</div>
     <div class="ui-label note-info">%INFO%</div>
-	<div class="ui-label note-status">%STATUS%</div>
     <div class="ui-indicator ui-arrow-direction-right"></div>
+  </div>
+  <div class="ui-list-action-group">
+    <div class="ui-list-action ui-background-destructive-color" data-uid="%UID%">
+      <div>%TRASH%</div>
+    </div>
   </div>
 </body>
 

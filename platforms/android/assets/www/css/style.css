@@ -1,5 +1,5 @@
 /**
- * Filer v2 Styles
+ * Filer v5 Styles
  *
  * @author Kerri Shotts
  * @version 7.0.0
@@ -116,12 +116,10 @@ body.android {
   background-color: #e7ece6;
   color: #484848;
 }
-.noteListView {
-  z-index: 10;
-}
-.noteEditView {
-  z-index: 20;
-}
+/*
+ * NOTE LIST VIEW specific styles
+ */
+
 /* style the list items */
 
 .noteListView .ui-list-item {
@@ -199,7 +197,7 @@ body.android {
 }
 /* position and style the modified date */
 
-.noteListView .ui-list-item .note-modified-date,.noteListView .ui-list-item .note-status{
+.noteListView .ui-list-item .note-modified-date {
   font-size: 16px;
   line-height: 20px;
   font-weight: 300;
@@ -210,13 +208,11 @@ body.android {
   color: #606060;
 }
 .noteListView .ui-list-item:active .note-modified-date,
-.noteListView .ui-list-item:active .note-info,
-.noteListView .ui-list-item:active .note-status {
+.noteListView .ui-list-item:active .note-info {
   color: rgba(255, 255, 255, 0.5);
 }
 .android .noteListView .ui-list-item:active .note-modified-date,
-.android .noteListView .ui-list-item:active .note-info ,
-.android .noteListView .ui-list-item:active .note-status {
+.android .noteListView .ui-list-item:active .note-info {
   color: #242424;
 }
 /* position and style the note information */
@@ -262,22 +258,9 @@ body.android {
   overflow: hidden;
   white-space: nowrap;
 }
-.android .noteEditView .ui-navigation-bar .ui-title {
-  left: 20px;
-}
-.noteEditView .ui-back-button::before {
-  background-color: #45bc64;
-}
-.android .noteEditView .ui-back-button::before {
-  background-color: #484848;
-}
-.android .ui-back-button {
-  color: transparent;
-}
 /* Each edit view has a text box for the note; style appropriately */
 
 .noteEditView .ui-text-box {
-  min-height: 100%;
   display: block;
   border: 0;
   background-color: transparent;
@@ -301,9 +284,158 @@ body.android {
   font-family: "Roboto", "DroidSans", Helvetica, Arial, Sans-Serif;
   color: #484848;
 }
+/* A little out of place; but each view has specific needs for its text box.
+   For the audio note, it needs to be 100px shorter. */
 
+.AudioNoteEditView .ui-text-box {
+  /* Android < 4.4 doesn't understand calc, but in this case, it's fine; it'll get 100% */
+  height: -webkit-calc(100% - 100px);
+  height: calc(100% - 100px);
+}
+/* For IMAGE and VIDEO NOTE EDIT VIEWs, it needs to be 200px shorter. */
 
-/*~~~~~~ Custom CSS ~~~~~~*/
-.note-status{
-	padding-left:1em;
+.ImageNoteEditView .ui-text-box,
+.VideoNoteEditView .ui-text-box {
+  /* Android < 4.4 doesn't understand calc, but in this case, it's fine; it'll get 100% */
+  height: -webkit-calc(100% - 200px);
+  height: calc(100% - 200px);
+  -webkit-transition: margin 0.3s ease-in-out, height 0.3s ease-in-out;
+  -moz-transition: margin 0.3s ease-in-out, height 0.3s ease-in-out;
+  -ms-transition: margin 0.3s ease-in-out, height 0.3s ease-in-out;
+  transition: margin 0.3s ease-in-out, height 0.3s ease-in-out;
+  background-color: #f1eee5;
+}
+.android .ImageNoteEditView .ui-text-box,
+.android .VideoNoteEditView .ui-text-box {
+  background-color: #e7ece6;
+}
+/* The text box slides up and over the image/video element when editing so as to give
+   sufficient space. */
+
+.ImageNoteEditView .ui-text-box.editing,
+.VideoNoteEditView .ui-text-box.editing {
+  height: 100%;
+  margin-top: -200px;
+  /* without these, android puts the text bux underneath the image/video */
+  -webkit-transform: translateZ(1px);
+  -moz-transform: translateZ(1px);
+  -ms-transform: translateZ(1px);
+  -o-transform: translateZ(1px);
+  transform: translateZ(1px);
+  position: absolute;
+}
+/*
+ * AUDIO NOTE VIEW styles
+ */
+
+/* style the audio container */
+
+.AudioNoteEditView .audio-container {
+  text-align: center;
+  background-color: #FFF;
+  border-bottom: 1px solid rgba(87, 52, 32, 0.25);
+  height: 100px;
+}
+.android .AudioNoteEditView .audio-container {
+  background-color: #e7ece6;
+  border-bottom: 2px solid #484848;
+}
+/* make sure the buttons inside are 44x44px */
+
+.AudioNoteEditView .audio-container div {
+  display: inline-block;
+  min-width: 44px;
+  min-height: 44px;
+}
+/* position the audio information (position / duration) */
+
+.AudioNoteEditView .audio-information {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  min-height: 0 !important;
+  opacity: 0.5;
+}
+/*
+ * IMAGE NOTE EDIT VIEW styles
+ */
+
+/* style the container for the image */
+
+.ImageNoteEditView .image-container {
+  text-align: center;
+  background-color: #000;
+  border-bottom: 1px solid rgba(87, 52, 32, 0.25);
+  height: 200px;
+  background-position: center center;
+  background-size: contain;
+  position: relative;
+}
+.android .ImageNoteEditView .image-container {
+  background-color: #000;
+  border-bottom: 2px solid #484848;
+}
+/* any buttons inside -- like the camera button -- need to be
+   positioned absolutely */
+
+.ImageNoteEditView .image-container div {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  -webkit-mask-position-y: 100%;
+  -moz-mask-position-y: 100%;
+  -ms-mask-position-y: 100%;
+  mask-position-y: 100%;
+  background-color: white;
+}
+/* since masked icons can't have more than one color (+transparent),
+   we duplicate the icon with a different color so we can outline it.
+   The +1px enables the outline. That said, on Android < 4.4, the
+   outline isn't visible, due to the use of calc(). */
+
+.ImageNoteEditView .image-container div.outline {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  -webkit-mask-position-y: -webkit-calc(100% + 1px);
+  -webkit-mask-position-y: calc(100% + 1px);
+  -moz-mask-position-y: calc(100% + 1px);
+  -ms-mask-position-y: calc(100% + 1px);
+  mask-position-y: calc(100% + 1px);
+  background-color: black;
+}
+.VideoNoteEditView .video-container {
+  text-align: center;
+  background-color: #000;
+  height: 200px;
+  position: relative;
+}
+/* the video element inside needs to be 100% x 100% */
+
+.VideoNoteEditView .video-container .video-element video {
+  width: 100%;
+  height: 156px;
+}
+.android .VideoNoteEditView .video-container .video-element video {
+  height: 154px;
+}
+/* style the video actions bar */
+
+.VideoNoteEditView .video-container .video-actions {
+  height: 44px;
+  text-align: center;
+  line-height: 44px;
+  border-top: 1px solid rgba(87, 52, 32, 0.25);
+  border-bottom: 1px solid rgba(87, 52, 32, 0.25);
+}
+.android .VideoNoteEditView .video-container .video-actions {
+  height: 48px;
+  line-height: 48px;
+  background-color: #d7dcd6;
+  border-top: 2px solid #484848;
+  border-bottom: 2px solid #484848;
 }

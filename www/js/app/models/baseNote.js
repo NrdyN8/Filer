@@ -215,22 +215,6 @@ define( [ "yasmf" ], function( _y ) {
       get: self.getRepresentation,
       configurable: true
     } );
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	//Getter and Setter for status
-	self._status = "";
-	self.getStatus = function(){
-		return self._status;
-	}
-	self.setStatus = function(newStatus){
-		self._status = newStatus;
-		self._modifiedDate = new Date();
-	}
-	Object.defineProperty(self, "status", {
-		get: self.getStatus,
-		set: self.setStatus,
-		configurable: true
-	});
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     /**
      * Serializes the object into a JSON string ready
      * for saving in storage.
@@ -245,8 +229,7 @@ define( [ "yasmf" ], function( _y ) {
         "mediaContents": self.mediaContents,
         "unitValue": self.unitValue,
         "unitLabels": self.unitLabels,
-        "representation": self.representation,
-		"status": self.status
+        "representation": self.representation
       } );
     };
     Object.defineProperty( self, "JSON", {
@@ -269,8 +252,6 @@ define( [ "yasmf" ], function( _y ) {
         self.unitValue = aNote.unitValue; // so we don't have to recalc it
         // but assign this one last so we have the proper modification date
         self._modifiedDate = new Date( aNote.modifiedDate );
-		//Loads the status saved in the JSON
-		self._status = aNote.status;
         return true;
       } catch ( e ) {
         return false;
@@ -327,11 +308,6 @@ define( [ "yasmf" ], function( _y ) {
         }
         if ( typeof options.modifiedDate !== "undefined" ) {
           self._modifiedDate = options.modifiedDate;
-        }
-		
-		//Sets the status options
-		if ( typeof options.status !== "undefined" ) {
-          self._status = options.status;
         }
       }
     };

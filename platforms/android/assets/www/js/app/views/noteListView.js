@@ -4,7 +4,7 @@
  *
  * noteListView.js
  * @author Kerri Shotts
- * @version 1.0.0
+ * @version 4.0.0
  *
  * Copyright (c) 2013 Packt Publishing
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this
@@ -42,9 +42,9 @@
 /*global define*/
 define( [ "yasmf", "app/models/noteStorageSingleton", "text!html/noteListView.html!strip",
   "text!html/noteListView_android.html!strip", "text!html/noteListItem.html!strip",
-  "app/factories/noteFactory", "app/factories/noteViewFactory"
+  "app/factories/noteFactory", "app/factories/noteViewFactory", "hammer"
 ], function( _y, noteStorageSingleton, noteListViewHTML, noteListViewAndroidHTML,
-  noteListItemHTML, noteFactory, noteViewFactory ) {
+  noteListItemHTML, noteFactory, noteViewFactory, Hammer ) {
   var _className = "NoteListView";
   var NoteListView = function() {
     // we descend from a simple ViewContainer
@@ -66,34 +66,77 @@ define( [ "yasmf", "app/models/noteStorageSingleton", "text!html/noteListView.ht
         var aNoteEditView = noteViewFactory.createNoteEditView( noteType );
         // and tell it about the new note
         aNoteEditView.initWithOptions( {
-          note: aNewNote,
-          parent: self.parentElement
+          note: aNewNote
         } );
+        self.navigationController.pushView( aNoteEditView );
       } ).catch( function( anError ) {
         console.log( anError )
       } ).done();
-    }
+    };
     /**
-     * Creates a new text note
+     * Create a new text note
      */
     self.createNewTextNote = function() {
       self._createAndEditNote( noteFactory.TEXTNOTE );
     };
     /**
+     * Create a new audio note
+     */
+    self.createNewAudioNote = function() {
+      self._createAndEditNote( noteFactory.AUDIONOTE );
+    };
+    /**
+     * Create a new image note
+     */
+    self.createNewImageNote = function() {
+      self._createAndEditNote( noteFactory.IMAGENOTE );
+    };
+    /**
+     * Create a new video note
+     */
+    self.createNewVideoNote = function() {
+      self._createAndEditNote( noteFactory.VIDEONOTE );
+    };
+    /**
      * Edit an existing note. Called when a note item is tapped in the list.
      */
     self.editExistingNote = function( e ) {
-      var theEvent = _y.UI.event.convert( this, e ); // this will be the data row
       // get the UID
-      var theUID = theEvent.target.getAttribute( "data-uid" );
+      var theUID = this.getAttribute( "data-uid" );
       // create a new editor view
       var aNote = noteStorageSingleton.getNote( theUID );
       var aNoteEditView = noteViewFactory.createNoteEditView( aNote.class );
       // and tell it about the note
       aNoteEditView.initWithOptions( {
-        note: aNote,
-        parent: self.parentElement
+        note: aNote
       } );
+      self.navigationController.pushView( aNoteEditView );
+    };
+    /**
+     * Delete an existing note
+     */
+    self.deleteExistingNote = function( e ) {
+      var theEvent = e;
+      // get the UID
+      var theUID = this.getAttribute( "data-uid" );
+      noteStorageSingleton.removeNote( theUID );
+    };
+    /**
+     * Expose the underlying actions for a note; called when a right-to-left swipe is detected
+     */
+    self.exposeActionForNote = function( e ) {
+      _y.UI.styleElement( this, "transition", "%PREFIX%transform 0.3s ease-in-out" );
+      // how far do we have to go?
+      var amountToTranslate = getComputedStyle( self._listOfNotes.querySelector(
+        ".ui-list-action" ) ).getPropertyValue( "width" );
+      _y.UI.styleElement( this, "transform", "translateX(-" + amountToTranslate + ")" );
+    }
+    /**
+     * hide the underlying actions for a note
+     */
+    self.hideActionForNote = function( e ) {
+      _y.UI.styleElement( this, "transition", "%PREFIX%transform 0.3s ease-in-out" );
+      _y.UI.styleElement( this, "transform", "translateX(0px)" );
     };
     /**
      * Quit the app, in response to a back button event.
@@ -130,9 +173,27 @@ define( [ "yasmf", "app/models/noteStorageSingleton", "text!html/noteListView.ht
         ".ui-bar-button.ui-glyph-camera" );
       self._newVideoNoteButton = self.element.querySelector(
         ".ui-bar-button.ui-glyph-camera-video" );
-      _y.UI.event.addListener( self._newTextNoteButton, "click", self.createNewTextNote );
+      Hammer( self._newTextNoteButton ).on( "tap", self.createNewTextNote );
+      Hammer( self._newAudioNoteButton ).on( "tap", self.createNewAudioNote );
+      Hammer( self._newImageNoteButton ).on( "tap", self.createNewImageNote );
+      Hammer( self._newVideoNoteButton ).on( "tap", self.createNewVideoNote );
       _y.UI.backButton.addListenerForNotification( "backButtonPressed", self.quitApp );
-    }
+    };
+    /**
+     * private method that handles hiding any visible actions in a list
+     */
+    self._hideActions = function( e ) {
+      e.gesture.preventDefault();
+      var allListItems = self._listOfNotes.querySelectorAll( ".ui-list-item-contents" );
+      for ( var i = 0; i < allListItems.length; i++ ) {
+        var el = allListItems[ i ];
+        if ( el.getAttribute( "data-swiped" ) == "true" ) {
+          el.setAttribute( "data-swiped", "false" );
+          self.hideActionForNote.apply( el );
+        }
+        Hammer( el ).off( "touch", self._hideActions );
+      }
+    };
     /**
      * Render the note list; called whenever the storage collection changes
      */
@@ -153,15 +214,37 @@ define( [ "yasmf", "app/models/noteStorageSingleton", "text!html/noteListView.ht
             // render the note item template
             e.innerHTML = _y.template( noteListItemHTML, {
               "UID": notes[ note ].uid,
+              "TRASH": _y.T( "TRASH" ),
               "NAME": notes[ note ].name,
               "REPRESENTATION": notes[ note ].representation,
               "MODIFIED": _y.D( notes[ note ].modifiedDate, "D" ),
-              "INFO": "" + _y.N( notes[ note ].formattedUnitValue ),
-			  //Displays status on note
-			  "STATUS": notes[ note ].status
+              "INFO": "" + _y.N( notes[ note ].formattedUnitValue )
             } );
             // attach any event handlers
-            _y.UI.event.addListener( e, "click", self.editExistingNote );
+            var contentsElement = e.querySelector( ".ui-list-item-contents" ),
+              actionElement = e.querySelector( ".ui-list-action" );
+            Hammer( contentsElement ).on( "tap", self.editExistingNote );
+            // right-to-left swipe exposes action, and when it occurs, we need add code to all other itmes
+            // to hide all actions
+            Hammer( contentsElement, {
+              swipe_velocity: 0.1,
+              drag_block_horizontal: true,
+              drag_block_vertical: true,
+              prevent_default: true
+            } ).on( "dragleft", function( e ) {
+              var row = this;
+              e.gesture.preventDefault();
+              e.gesture.stopDetect();
+              row.setAttribute( "data-swiped", "true" );
+              self.exposeActionForNote.apply( row );
+              var allListItems = self._listOfNotes.querySelectorAll(
+                ".ui-list-item-contents" );
+              for ( var i = 0; i < allListItems.length; i++ ) {
+                var el = allListItems[ i ];
+                Hammer( el ).on( "touch", self._hideActions );
+              }
+            } );
+            Hammer( actionElement ).on( "tap", self.deleteExistingNote );
             // append the element to our list
             fragment.appendChild( e );
           }
@@ -199,7 +282,7 @@ define( [ "yasmf", "app/models/noteStorageSingleton", "text!html/noteListView.ht
       // we need to register for orientation changes
       _y.UI.orientationHandler.addListenerForNotification( "orientationChanged", self
         .onOrientationChanged );
-    };
+    }
     self.overrideSuper( self.class, "initWithOptions", self.init );
     self.initWithOptions = function( options ) {
       var theParentElement;
@@ -237,9 +320,25 @@ define( [ "yasmf", "app/models/noteStorageSingleton", "text!html/noteListView.ht
     "APP_TITLE": {
       "EN": "Filer"
     },
+    "NEW_NOTE": {
+      "EN": "New",
+      "ES": "Nueva"
+    },
     "BACK": {
       "EN": "Back",
       "ES": "Volver"
+    },
+    "TRASH": {
+      "EN": "Trash",
+      "ES": "Borrar"
+    },
+    "CANCEL": {
+      "EN": "Cancel",
+      "ES": "Cancelar"
+    },
+    "DELETE": {
+      "EN": "Delete",
+      "ES": "Eliminar"
     }
   } );
   return NoteListView;
