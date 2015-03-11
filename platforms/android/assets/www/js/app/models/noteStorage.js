@@ -219,7 +219,9 @@ define( [ "yasmf", "Q", "app/factories/noteFactory" ], function( _y, Q, noteFact
         "uid": noteUID,
         "name": _y.T( "app.ns.A_NEW_NOTE" ),
         "textContents": _y.T( "app.ns.WHATS_ON_YOUR_MIND" ),
-        "mediaContents": newMediaFileName
+        "mediaContents": newMediaFileName,
+		//Status default
+		"status": _y.T("app.ns.NEW_NOTE_STATUS")
       } );
       // add it to our collection
       self._notes[ aNote.uid ] = aNote;
@@ -351,6 +353,11 @@ define( [ "yasmf", "Q", "app/factories/noteFactory" ], function( _y, Q, noteFact
     "app.ns.NOTE_REMOVE_FAILED": {
       "en": "The note could not be removed.",
       "es": "La nota no se eliminó."
+    },
+	//Translation for open
+	"app.ns.NEW_NOTE_STATUS": {
+      "en": "Open",
+      "es": "abierto"
     }
   } );
   return NoteStorage;

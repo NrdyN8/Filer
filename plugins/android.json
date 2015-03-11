@@ -23,6 +23,10 @@
                         {
                             "xml": "<feature name=\"Media\"><param name=\"android-package\" value=\"org.apache.cordova.media.AudioHandler\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Camera\"><param name=\"android-package\" value=\"org.apache.cordova.camera.CameraLauncher\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -32,7 +36,7 @@
                     "/*": [
                         {
                             "xml": "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />",
-                            "count": 2
+                            "count": 3
                         },
                         {
                             "xml": "<uses-permission android:name=\"android.permission.RECORD_AUDIO\" />",
@@ -62,6 +66,9 @@
             "PACKAGE_NAME": "com.packetpub.phonegaphotshot.ch04"
         },
         "org.apache.cordova.media": {
+            "PACKAGE_NAME": "com.packtpub.phonegaphotshot.filerv5"
+        },
+        "org.apache.cordova.camera": {
             "PACKAGE_NAME": "com.packtpub.phonegaphotshot.filerv5"
         }
     },

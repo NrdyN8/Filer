@@ -197,7 +197,7 @@ body.android {
 }
 /* position and style the modified date */
 
-.noteListView .ui-list-item .note-modified-date {
+.noteListView .ui-list-item .note-modified-date .note-status {
   font-size: 16px;
   line-height: 20px;
   font-weight: 300;
@@ -207,12 +207,17 @@ body.android {
 .android .noteListView .ui-list-item .note-modified-date {
   color: #606060;
 }
+/*Added status to list to define color for status */
 .noteListView .ui-list-item:active .note-modified-date,
-.noteListView .ui-list-item:active .note-info {
+.noteListView .ui-list-item:active .note-info,
+.noteListView .ui-list-item:active .note-status {
   color: rgba(255, 255, 255, 0.5);
 }
+
+/*Added status to list to define color for status */
 .android .noteListView .ui-list-item:active .note-modified-date,
-.android .noteListView .ui-list-item:active .note-info {
+.android .noteListView .ui-list-item:active .note-info,
+.android .noteListView .ui-list-item:active .note-status {
   color: #242424;
 }
 /* position and style the note information */
@@ -438,4 +443,10 @@ body.android {
   background-color: #d7dcd6;
   border-top: 2px solid #484848;
   border-bottom: 2px solid #484848;
+}
+
+/*~~~~~~ Custom CSS ~~~~~~*/
+/* Adds padding in between date and status */
+.note-status{
+	padding-left:1em;
 }

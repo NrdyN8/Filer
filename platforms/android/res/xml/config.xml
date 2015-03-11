@@ -14,6 +14,9 @@
     <feature name="Media">
         <param name="android-package" value="org.apache.cordova.media.AudioHandler" />
     </feature>
+    <feature name="Camera">
+        <param name="android-package" value="org.apache.cordova.camera.CameraLauncher" />
+    </feature>
     <name>FilerV5</name>
     <description>
         PhoneGap HotShot 3.x Mobile Application Development, Filer Version 5. 
