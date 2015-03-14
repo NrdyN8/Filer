@@ -57,14 +57,33 @@ define( [ "yasmf", "app/models/noteStorageSingleton",
     self._contentsEditor = null;
     self._backButton = null;
     self._deleteButton = null;
+	
+	//~~~~~~~~ This is the status editor for the note
+	self._statusEditor = null;
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	
     // the note we're editing
     self._note = null;
     /**
      * Save the specific note by copying the name and contents
      * from the DOM
      */
+	 
+	 self.getStatus = function()
+	 {
+		 if(self._statusEditor == null)
+		 {
+			 return "????";
+		 }
+		 else
+		 {
+			 return self._statusEditor.innerText;
+		 }
+	 }
+	 
     self.saveNote = function() {
       self._note.name = self._nameEditor.innerText;
+	  self._note.status = self.getStatus();
       self._note.textContents = self._contentsEditor.value;
       noteStorageSingleton.saveNote( self._note );
     };
@@ -114,7 +133,11 @@ define( [ "yasmf", "app/models/noteStorageSingleton",
         "NOTE_NAME": self._note.name,
         "NOTE_CONTENTS": self._note.textContents,
         "BACK": _y.T( "BACK" ),
-        "DELETE_NOTE": _y.T( "app.nev.DELETE_NOTE" )
+        "DELETE_NOTE": _y.T( "app.nev.DELETE_NOTE" ),
+		//~~~~~~~~~~~~~~~~~~~~~~~~~~
+		//  Displays the status
+		"STATUS_EDIT":self._note.status
+		//~~~~~~~~~~~~~~~~~~~~~~~~~~
       } );
     };
     /**
@@ -126,10 +149,9 @@ define( [ "yasmf", "app/models/noteStorageSingleton",
       self.super( _className, "renderToElement" );
       self._navigationBar = self.element.querySelector( ".ui-navigation-bar" );
       self._nameEditor = self.element.querySelector( ".ui-navigation-bar .ui-title" );
-      self._backButton = self.element.querySelector(
-        ".ui-navigation-bar .ui-bar-button-group.ui-align-left .ui-back-button" );
-      self._deleteButton = self.element.querySelector(
-        ".ui-navigation-bar .ui-bar-button-group.ui-align-right .ui-bar-button" );
+      self._backButton =   self.element.querySelector(".ui-navigation-bar .ui-bar-button-group.ui-align-left .ui-back-button" );
+	  self._statusEditor = self.element.querySelector(".ui-status");
+      self._deleteButton = self.element.querySelector( ".ui-navigation-bar .ui-bar-button-group.ui-align-right .ui-bar-button" );
       self._scrollContainer = self.element.querySelector( ".ui-scroll-container" );
       self._contentsEditor = self.element.querySelector( ".ui-text-box" );
       Hammer( self._backButton ).on( "tap", self.goBack );
@@ -187,6 +209,7 @@ define( [ "yasmf", "app/models/noteStorageSingleton",
       self._scrollContainer = null;
       self._nameEditor = null;
       self._contentsEditor = null;
+	  self._statusEditor = null;
       self.super( _className, "destroy" );
     };
     return self;
