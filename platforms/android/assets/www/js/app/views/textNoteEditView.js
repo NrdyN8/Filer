@@ -23,7 +23,9 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  *
  *		Edited 3/14/15 by Nathan Hale
- *      -Added user editable status
+ *     			 -Added user editable status
+ *			-Changed status to "Archived" & "Follow Up"
+ *			-Changed status editor from text input to toggle via alert
  *
  *
  */

@@ -21,6 +21,13 @@
  * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
  * OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
+ *
+ *
+ *
+ *	Edited 3/14/15 by Nathan Hale
+ *		- Changed starting status from "Open" to "Follow Up"
+ *
+ *
  */
 /*jshint
          asi:true,
@@ -356,8 +363,8 @@ define( [ "yasmf", "Q", "app/factories/noteFactory" ], function( _y, Q, noteFact
     },
 	//Translation for open
 	"app.ns.NEW_NOTE_STATUS": {
-      "en": "Open",
-      "es": "abierto"
+      "en": "Follow Up",
+      "es": "Seguimiento"
     }
   } );
   return NoteStorage;
