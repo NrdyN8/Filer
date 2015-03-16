@@ -197,7 +197,7 @@ body.android {
 }
 /* position and style the modified date */
 
-.noteListView .ui-list-item .note-modified-date .note-status {
+.noteListView .ui-list-item .note-modified-date {
   font-size: 16px;
   line-height: 20px;
   font-weight: 300;
@@ -446,7 +446,8 @@ body.android {
 }
 
 /*~~~~~~ Custom CSS ~~~~~~*/
-/* Adds padding in between date and status */
+/* Adds padding in between date and status|Floats the status right */
 .note-status{
-	padding-left:1em;
+	float:right;
+	padding-right:1em;
 }
