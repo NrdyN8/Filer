@@ -449,5 +449,13 @@ body.android {
 /* Adds padding in between date and status|Floats the status right */
 .note-status{
 	float:right;
-	padding-right:1em;
+	margin-right:1em;
+	width:25px;
+	height:25px;
+}
+.archive{
+	background-image: url("../img/file_cabinet.png");
+}
+.follow_up{
+	background-image: url("../img/push_pin.png");
 }

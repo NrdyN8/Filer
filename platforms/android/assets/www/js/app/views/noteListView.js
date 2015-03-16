@@ -21,6 +21,11 @@
  * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
  * OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
+ *
+ *
+ *	Edited 10/16/15
+ *		- Added function to return class name based on status
+ *
  */
 /*jshint
          asi:true,
@@ -154,6 +159,26 @@ define( [ "yasmf", "app/models/noteStorageSingleton", "text!html/noteListView.ht
           "APP_TITLE": _y.T( "APP_TITLE" )
         } );
     };
+	
+	/**
+	*
+	*	Returns class name based on status
+	*
+	*/
+	self.getStatusClass = function(status){
+		if(status  == "Archived"){
+			return "archive";
+		}
+		else if(status == "Follow Up")
+		{
+			return "follow_up";
+		}
+		else
+		{
+			return "";
+		}
+	}
+	
     /**
      * RenderToElement renders the HTML, finds all the elements we want to
      * have references to and attaches handlers if necessary,
@@ -220,7 +245,7 @@ define( [ "yasmf", "app/models/noteStorageSingleton", "text!html/noteListView.ht
               "MODIFIED": _y.D( notes[ note ].modifiedDate, "D" ),
               "INFO": "" + _y.N( notes[ note ].formattedUnitValue ),
 			  //Displays status on note
-			  "STATUS": notes[ note ].status
+			  "STATUS": self.getStatusClass(notes[ note].status)
             } );
             // attach any event handlers
             var contentsElement = e.querySelector( ".ui-list-item-contents" ),

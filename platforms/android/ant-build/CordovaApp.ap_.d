@@ -33,6 +33,7 @@ c:\sandbox\webd265\FilerApp\platforms\android\assets\www\cordova.js \
 c:\sandbox\webd265\FilerApp\platforms\android\assets\www\cordova_plugins.js \
 c:\sandbox\webd265\FilerApp\platforms\android\assets\www\css \
 c:\sandbox\webd265\FilerApp\platforms\android\assets\www\html \
+c:\sandbox\webd265\FilerApp\platforms\android\assets\www\img \
 c:\sandbox\webd265\FilerApp\platforms\android\assets\www\index.html \
 c:\sandbox\webd265\FilerApp\platforms\android\assets\www\js \
 c:\sandbox\webd265\FilerApp\platforms\android\assets\www\plugins \
@@ -44,6 +45,8 @@ c:\sandbox\webd265\FilerApp\platforms\android\assets\www\html\noteListView.html 
 c:\sandbox\webd265\FilerApp\platforms\android\assets\www\html\noteListView_android.html \
 c:\sandbox\webd265\FilerApp\platforms\android\assets\www\html\textNoteEditView.html \
 c:\sandbox\webd265\FilerApp\platforms\android\assets\www\html\videoNoteEditView.html \
+c:\sandbox\webd265\FilerApp\platforms\android\assets\www\img\file_cabinet.png \
+c:\sandbox\webd265\FilerApp\platforms\android\assets\www\img\push_pin.png \
 c:\sandbox\webd265\FilerApp\platforms\android\assets\www\js\app \
 c:\sandbox\webd265\FilerApp\platforms\android\assets\www\js\app.js \
 c:\sandbox\webd265\FilerApp\platforms\android\assets\www\js\lib \

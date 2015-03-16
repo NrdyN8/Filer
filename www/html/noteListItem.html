@@ -19,6 +19,10 @@
       LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
       OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
       OTHER DEALINGS IN THE SOFTWARE.
+	  
+	  Edited 3/16/15
+		-Moved status to class so that it shows a picture
+	  
     -->
 
 <body>
@@ -31,7 +35,7 @@
     <!-- Shows the note specific information, e.g. Line number, audio clip length, video length -->
 	<div class="ui-label note-info">%INFO%</div>
 		<!-- Shows the status of the current note -->
-	<div class="ui-label note-status">%STATUS%</div>
+	<div class="ui-label note-status %STATUS%"></div>
 	<!-- Direction arrow to open note-->
     <div class="ui-indicator ui-arrow-direction-right"></div>
   </div>
